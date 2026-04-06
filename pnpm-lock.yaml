@@ -384,6 +384,8 @@ importers:
 
   extensions/duckduckgo: {}
 
+  extensions/dynamic-router: {}
+
   extensions/elevenlabs: {}
 
   extensions/exa: {}

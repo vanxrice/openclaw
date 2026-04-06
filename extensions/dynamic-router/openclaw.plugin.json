@@ -1,0 +1,13 @@
+{
+  "id": "dynamic-router",
+  "name": "Dynamic Router",
+  "version": "1.0.0",
+  "description": "Routes first message to a heavy model, fallback to light model.",
+  "main": "index.js",
+  "type": "module",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {}
+  }
+}

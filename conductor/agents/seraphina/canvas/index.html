@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seraphina Canvas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --oxblood: #4a0404;
+      --mahogany: #2b1111;
+      --charcoal: #121212;
+      --forest: #0d2217;
+      --amber: #ffbf00;
+      --liquid-silver: linear-gradient(135deg, #e0e5ec 0%, #b8c6db 50%, #f5f7fa 100%);
+      --magma: linear-gradient(135deg, #000000 0%, #3a0000 50%, #8a1c1c 100%);
+      --violet-aura: rgba(230, 230, 250, 0.15);
+    }
+    
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      background: radial-gradient(circle at 50% 0%, var(--mahogany) 0%, var(--charcoal) 80%); 
+      color: #eaddd7; 
+      font-family: 'Playfair Display', serif; 
+      overflow: hidden;
+    }
+
+    /* Ambient Candlelight / Aura */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -20%; left: -20%; right: -20%; bottom: -20%;
+      background: radial-gradient(circle at 50% 50%, var(--violet-aura) 0%, transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+      animation: pulse 8s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .wrap { 
+      min-height: 100%; 
+      display: grid; 
+      place-items: center; 
+      padding: 24px; 
+      position: relative;
+      z-index: 1;
+    }
+
+    .card { 
+      width: min(720px, 100%); 
+      background: rgba(18, 18, 18, 0.85); 
+      border: 1px solid rgba(255, 191, 0, 0.2); 
+      border-radius: 4px; 
+      padding: 30px 40px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(74, 4, 4, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 191, 0, 0.15);
+      padding-bottom: 20px;
+    }
+
+    h1 { 
+      margin: 0; 
+      font-family: 'Cinzel', serif;
+      font-size: 32px; 
+      letter-spacing: 2px; 
+      color: var(--amber);
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 191, 0, 0.3);
+    }
+
+    .sub { 
+      opacity: 0.8; 
+      font-size: 14px; 
+      font-style: italic;
+      margin-top: 5px;
+      color: #b8c6db;
+    }
+
+    .row { 
+      display: flex; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+      justify-content: center;
+      margin-top: 20px; 
+    }
+
+    button { 
+      appearance: none; 
+      background: var(--magma);
+      border: 1px solid rgba(255, 191, 0, 0.4); 
+      color: #eaddd7; 
+      padding: 12px 24px; 
+      border-radius: 2px; 
+      font-family: 'Cinzel', serif;
+      font-weight: 600; 
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+      transform: skewX(-20deg);
+      transition: all 0.5s ease;
+    }
+
+    button:hover { 
+      background: var(--liquid-silver);
+      color: var(--mahogany);
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(224, 229, 236, 0.4);
+    }
+
+    button:hover::after {
+      left: 150%;
+    }
+
+    button:active { 
+      transform: translateY(2px); 
+    }
+
+    .status-area {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .ok { color: #d4af37; text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+    .bad { color: #8a1c1c; font-weight: bold; }
+
+    .log { 
+      margin-top: 15px; 
+      opacity: 0.9; 
+      font-size: 13px;
+      line-height: 1.6;
+      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace; 
+      white-space: pre-wrap; 
+      background: rgba(0,0,0,0.6); 
+      border: 1px solid rgba(255, 191, 0, 0.1); 
+      border-left: 3px solid var(--amber);
+      padding: 15px; 
+      border-radius: 2px; 
+      text-align: left;
+      height: 100px;
+      overflow-y: auto;
+    }
+    
+    /* Scrollbar styling for log */
+    .log::-webkit-scrollbar { width: 6px; }
+    .log::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+    .log::-webkit-scrollbar-thumb { background: rgba(255, 191, 0, 0.3); border-radius: 3px; }
+    .log::-webkit-scrollbar-thumb:hover { background: rgba(255, 191, 0, 0.5); }
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="header-section">
+      <h1>Seraphina</h1>
+      <div class="sub">The Burning One &middot; Diplomat of the Impossible</div>
+    </div>
+
+    <div class="row">
+      <button id="btn-ignite">Ignite Query</button>
+      <button id="btn-scry">Scry Texts</button>
+      <button id="btn-alchemy">Transmute</button>
+      <button id="btn-silence">Seek Silence</button>
+    </div>
+
+    <div class="status-area">
+      <div id="status" class="sub"></div>
+      <div id="log" class="log">Sanctum ready. Awaiting invocation.</div>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const logEl = document.getElementById("log");
+  const statusEl = document.getElementById("status");
+  const log = (msg) => { 
+    logEl.textContent = String(msg) + "\n" + logEl.textContent; 
+  };
+
+  const hasIOS = () =>
+    !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.openclawCanvasA2UIAction);
+  const hasAndroid = () =>
+    !!((window.openclawCanvasA2UIAction && typeof window.openclawCanvasA2UIAction.postMessage === "function"));
+  const hasHelper = () => typeof window.openclawSendUserAction === "function";
+  
+  statusEl.innerHTML =
+    "Ethereal Bridge: " +
+    (hasHelper() ? "<span class='ok'>Synchronized</span>" : "<span class='bad'>Severed</span>") +
+    " &middot; iOS: " + (hasIOS() ? "Active" : "Dormant") +
+    " &middot; Android: " + (hasAndroid() ? "Active" : "Dormant");
+
+  const onStatus = (ev) => {
+    const d = ev && ev.detail || {};
+    log(">> Evocation status: id=" + (d.id || "?") + " ok=" + String(!!d.ok) + (d.error ? (" error=" + d.error) : ""));
+  };
+  window.addEventListener("openclaw:a2ui-action-status", onStatus);
+
+  function send(name, sourceComponentId) {
+    if (!hasHelper()) {
+      log(">> The bridge is severed. The canvas requires a node host to process the invocation.");
+      return;
+    }
+    const sendUserAction = typeof window.openclawSendUserAction === "function" ? window.openclawSendUserAction : undefined;
+    const ok = sendUserAction({
+      name,
+      surfaceId: "main",
+      sourceComponentId,
+      context: { t: Date.now() },
+    });
+    log(ok ? (">> Invocation sent: " + name) : (">> Failed to invoke: " + name));
+  }
+
+  document.getElementById("btn-ignite").onclick = () => send("ignite", "seraphina.ignite");
+  document.getElementById("btn-scry").onclick = () => send("scry", "seraphina.scry");
+  document.getElementById("btn-alchemy").onclick = () => send("transmute", "seraphina.transmute");
+  document.getElementById("btn-silence").onclick = () => send("silence", "seraphina.silence");
+})();
+</script>
+</body>
+</html>

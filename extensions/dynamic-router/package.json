@@ -1,0 +1,11 @@
+{
+  "name": "@openclaw/dynamic-router",
+  "version": "1.0.0",
+  "description": "Dynamic Model Routing",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
